@@ -22,3 +22,14 @@ users:
   user:
     client-certificate: /Users/test/.minikube/client.crt
     client-key: /Users/test/.minikube/client.key
+- name: gke-cluster-config
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args: null
+      command: gke-gcloud-auth-plugin
+      env: null
+      installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
+        https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      interactiveMode: IfAvailable
+      provideClusterInfo: true
