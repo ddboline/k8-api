@@ -4,7 +4,7 @@ use std::io::Result as IoResult;
 use std::path::Path;
 
 use dirs::home_dir;
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer};
 use serde_json::Value;
 
 use crate::ConfigError;
@@ -142,8 +142,18 @@ pub struct UserDetail {
 pub struct Exec {
     #[serde(rename = "apiVersion")]
     pub api_version: String,
+    #[serde(deserialize_with = "deserialize_null_default")]
     pub args: Vec<String>,
     pub command: String,
+}
+
+fn deserialize_null_default<'de, D, T>(deserializer: D) -> Result<T, D::Error>
+where
+    T: Default + Deserialize<'de>,
+    D: Deserializer<'de>,
+{
+    let opt = Option::deserialize(deserializer)?;
+    Ok(opt.unwrap_or_default())
 }
 
 #[derive(Debug, Eq, PartialEq, Deserialize)]
